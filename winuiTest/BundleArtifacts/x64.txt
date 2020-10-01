@@ -1,0 +1,2 @@
+MainPackage=F:\teaching\principleWindows\git\winuiTest\x64\Release\winuiTest\winuiTest_1.0.2.0_x64.msix
+SymbolPackage=F:\teaching\principleWindows\git\winuiTest\winuiTest\x64\Release\Symbols\winuiTest_1.0.2.0_x64.appxsym
