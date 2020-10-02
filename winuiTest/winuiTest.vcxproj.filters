@@ -18,10 +18,18 @@
     <ClCompile Include="MainPage.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="BgLabelControl.cpp" />
+    <ClCompile Include="MgrThreads.cpp" />
+    <ClCompile Include="WorkThread.cpp" />
+    <ClCompile Include="Job.cpp" />
+    <ClCompile Include="LoopStride.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="BgLabelControl.h" />
+    <ClInclude Include="MgrThreads.h" />
+    <ClInclude Include="WorkThread.h" />
+    <ClInclude Include="Job.h" />
+    <ClInclude Include="LoopStride.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

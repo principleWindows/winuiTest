@@ -3,6 +3,8 @@
 #include "App.h"
 #include "MainPage.h"
 
+#include "MgrThreads.h"
+
 using namespace winrt;
 using namespace Windows::ApplicationModel;
 using namespace Windows::ApplicationModel::Activation;
@@ -109,6 +111,8 @@ void App::OnLaunched(Microsoft::UI::Xaml::LaunchActivatedEventArgs const& e)
 void App::OnSuspending([[maybe_unused]] IInspectable const& sender, [[maybe_unused]] SuspendingEventArgs const& e)
 {
     // Save application state and stop any background activity
+
+    delete  CMgrThreads::getMgr();
 }
 
 /// <summary>
