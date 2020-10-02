@@ -5,19 +5,23 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainPage.xaml" />
+    <Page Include="Themes\Generic.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="App.idl" />
     <Midl Include="MainPage.idl" />
+    <Midl Include="BgLabelControl.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="MainPage.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="BgLabelControl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="BgLabelControl.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">

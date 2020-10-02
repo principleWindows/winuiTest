@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "MainPage.g.h"
+#include "BgLabelControl.h"
 
 namespace winrt::winuiTest::implementation
 {
@@ -12,6 +13,7 @@ namespace winrt::winuiTest::implementation
         void MyProperty(int32_t value);
 
         void myButton_Click(Windows::Foundation::IInspectable const& sender, Microsoft::UI::Xaml::RoutedEventArgs const& args);
+        void Button2_Click(Windows::Foundation::IInspectable const& sender, Microsoft::UI::Xaml::RoutedEventArgs const& e);
     };
 }
 

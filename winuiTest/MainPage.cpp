@@ -28,5 +28,11 @@ namespace winrt::winuiTest::implementation
     void MainPage::myButton_Click(IInspectable const&, RoutedEventArgs const&)
     {
         myButton().Content(box_value(L"Clicked"));
+        myLabel().Label(L"yes!");
+    }
+
+    void MainPage::Button2_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
+    {
+        myButton().Content(box_value(L"button2 Clicked"));
     }
 }
