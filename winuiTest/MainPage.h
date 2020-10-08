@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <memory>
 #include "MainPage.g.h"
 #include "BgLabelControl.h"
 
@@ -15,11 +16,10 @@ namespace winrt::winuiTest::implementation
         int32_t MyProperty();
         void MyProperty(int32_t value);
 
-        void myButton_Click(Windows::Foundation::IInspectable const& sender, Microsoft::UI::Xaml::RoutedEventArgs const& args);
-        void Button2_Click(Windows::Foundation::IInspectable const& sender, Microsoft::UI::Xaml::RoutedEventArgs const& e);
+        void doJobsButton_Click(Windows::Foundation::IInspectable const& sender, Microsoft::UI::Xaml::RoutedEventArgs const& args);
+        void showResultButton_Click(Windows::Foundation::IInspectable const& sender, Microsoft::UI::Xaml::RoutedEventArgs const& e);
 
-        CMgrThreads *   m_pMgr;
-        CJob *          m_pJob;
+        std::unique_ptr<CJob> job1, job2, job3;
     };
 }
 

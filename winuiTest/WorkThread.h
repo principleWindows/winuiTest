@@ -10,7 +10,7 @@ namespace winrt::winuiTest::implementation
 	public:
 		void	loopWork ( );
 
-		CWorkThread::CWorkThread ( );
+		CWorkThread::CWorkThread(CMgrThreads *m_pMgr);
 		CWorkThread::~CWorkThread ( );
 
 		HANDLE	m_hThread;

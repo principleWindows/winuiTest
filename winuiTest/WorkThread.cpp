@@ -19,11 +19,9 @@ void CWorkThread::loopWork ( )
 {
 	while ( !m_pMgr->m_bExit )
 	{
-		LPJOB	pJob;
-		
-		pJob	= m_pMgr->getJob ( );
+		LPJOB pJob = m_pMgr->getJob();
 
-		if ( pJob == nullptr )
+		if (pJob == nullptr) // Job list is empty.
 		{
 			::Sleep ( 200 );
 			continue;
@@ -35,11 +33,11 @@ void CWorkThread::loopWork ( )
 	m_bExited	= true;
 }
 
-CWorkThread::CWorkThread ( )
+CWorkThread::CWorkThread(CMgrThreads *m_pMgr)
 {
 	pNext	= nullptr;
 
-	m_pMgr	= CMgrThreads::getMgr ( );
+	this->m_pMgr	= m_pMgr;
 
 	m_bExited	= false;
 

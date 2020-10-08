@@ -112,7 +112,7 @@ void App::OnSuspending([[maybe_unused]] IInspectable const& sender, [[maybe_unus
 {
     // Save application state and stop any background activity
 
-    delete  CMgrThreads::getMgr();
+    CMgrThreads::shutdown();
 }
 
 /// <summary>

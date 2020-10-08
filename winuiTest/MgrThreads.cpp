@@ -5,38 +5,38 @@ using namespace winrt;
 using namespace winuiTest;
 using namespace winuiTest::implementation;
 
-LPMGRTHREADS	CMgrThreads::m_pMgrThreads = nullptr;
+LPMGRTHREADS CMgrThreads::pMgrThreads = nullptr;
+std::mutex CMgrThreads::mtx;
 
-LPMGRTHREADS CMgrThreads::getMgr ( )
+LPMGRTHREADS CMgrThreads::getMgr()
 {
-	if ( m_pMgrThreads == nullptr )
-	{
-		m_pMgrThreads = new CMgrThreads;
-	}
+	std::lock_guard<std::mutex> locker(mtx);
+	if (pMgrThreads == nullptr)
+		pMgrThreads = new CMgrThreads();
+	return	pMgrThreads;
+}
 
-	return	m_pMgrThreads;
+void CMgrThreads::shutdown()
+{
+	std::lock_guard<std::mutex> locker(mtx);
+	if (CMgrThreads::pMgrThreads != nullptr)
+		delete pMgrThreads;
 }
 
 CMgrThreads::CMgrThreads()
 {
 	m_bExit	= false;
 
-	InitializeCriticalSection ( &m_cs );
-
-	SYSTEM_INFO		sysInfo;
-
-	GetSystemInfo ( &sysInfo );
-
-	m_nThreads	= sysInfo.dwNumberOfProcessors;
-
-	if ( MAX_NUM_THREADS < m_nThreads )
-		m_nThreads	= MAX_NUM_THREADS;
+	SYSTEM_INFO sysInfo;
+	GetSystemInfo(&sysInfo);
+	m_nThreads = sysInfo.dwNumberOfProcessors;
+	if (MAX_NUM_THREADS < m_nThreads)
+		m_nThreads = MAX_NUM_THREADS;
 
 	m_lstJob_header	= nullptr;
 	m_lstJob_tailer	= nullptr;
 
-//	the following line conflict with singleton
-//	createAllWorkThreads ( );
+	createAllWorkThreads();
 }
 
 CMgrThreads::~CMgrThreads()
@@ -58,8 +58,6 @@ CMgrThreads::~CMgrThreads()
 
 		delete	pThread;
 	}
-
-	m_pMgrThreads	= nullptr;
 }
 
 void CMgrThreads::createAllWorkThreads ( )
@@ -68,7 +66,7 @@ void CMgrThreads::createAllWorkThreads ( )
 
 	for ( DWORD i = 0; i < m_nThreads; i++ )
 	{
-		pThread	= new CWorkThread;
+		pThread	= new CWorkThread(this);
 
 		pThread->m_dwReturn	= i + 700;
 
@@ -82,43 +80,34 @@ void CMgrThreads::addJob ( LPJOB pJob )
 
 	pJob->pNext	= nullptr;
 
-	::EnterCriticalSection ( &m_cs );
+	std::lock_guard<std::mutex> locker(mtx);
 
 	if ( m_lstJob_header == nullptr )
 	{
 		m_lstJob_header	= pJob;
 		m_lstJob_tailer	= pJob;
-
-		::LeaveCriticalSection ( &m_cs );
-
 		return;
 	}
 
 	m_lstJob_tailer->pNext	= pJob;
 	m_lstJob_tailer			= pJob;
-
-	::LeaveCriticalSection ( &m_cs );
 }
 
 LPJOB CMgrThreads::getJob ( )
 {
 	LPJOB	pJob	= nullptr;
 
-	::EnterCriticalSection ( &m_cs );
+	std::lock_guard<std::mutex> locker(mtx);
 
-	if ( m_lstJob_header == nullptr )
-	{
-		::LeaveCriticalSection ( &m_cs );
-		return	pJob;
-	}
+	if (m_lstJob_header == nullptr)
+		return pJob;
 
 	pJob	= m_lstJob_header;
 
 	m_lstJob_header	= pJob->pNext;
 
-	if ( m_lstJob_header == nullptr )	m_lstJob_tailer	= nullptr;
-
-	::LeaveCriticalSection ( &m_cs );
+	if (m_lstJob_header == nullptr)
+		m_lstJob_tailer = nullptr;
 
 	return	pJob;
 }

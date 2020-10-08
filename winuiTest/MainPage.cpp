@@ -14,19 +14,14 @@ using namespace winrt::winuiTest;
 
 namespace winrt::winuiTest::implementation
 {
-    MainPage::MainPage ( )
-    {
-        InitializeComponent();
-
-        m_pJob  = nullptr;
-
-        m_pMgr  = CMgrThreads::getMgr ( );
-        m_pMgr->createAllWorkThreads ( );
-    }
+	MainPage::MainPage()
+	{
+		InitializeComponent();
+	}
 
     MainPage::~MainPage ( )
     {
-        delete  CMgrThreads::getMgr ( );
+        CMgrThreads::shutdown();
     }
 
     int32_t MainPage::MyProperty()
@@ -39,34 +34,47 @@ namespace winrt::winuiTest::implementation
         throw hresult_not_implemented();
     }
 
-    void MainPage::myButton_Click(IInspectable const&, RoutedEventArgs const&)
+    void MainPage::doJobsButton_Click(IInspectable const&, RoutedEventArgs const&)
     {
-        myButton().Content(box_value(L"Clicked"));
-        myLabel().Label(L"yes!");
+        if (job1 == nullptr && job2 == nullptr && job3 == nullptr)
+        {
+            job1 = std::make_unique<CLoopStride>(CLoopStride::Job_1);
+            job2 = std::make_unique<CLoopStride>(CLoopStride::Job_2);
+            job3 = std::make_unique<CLoopStride>(CLoopStride::Job_3);
 
-        if ( m_pJob != nullptr )    delete  m_pJob;
-        m_pJob    = new CLoopStride;
+            CMgrThreads::getMgr()->addJob(job1.get());
+            CMgrThreads::getMgr()->addJob(job2.get());
+            CMgrThreads::getMgr()->addJob(job3.get());
 
-        m_pMgr->addJob ( m_pJob );
+            resultTxt().Text(L"Three jobs begin to run.\nClick \"show result\" later to view results.");
+            doJobsButton().IsEnabled(false);
+            showResultButton().IsEnabled(true);
+        }
     }
 
-    void MainPage::Button2_Click(winrt::Windows::Foundation::IInspectable const& /*sender*/, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& /*e*/)
+    void MainPage::showResultButton_Click(IInspectable const& /*sender*/, RoutedEventArgs const& /*e*/)
     {
-        winrt::hstring   strResult;
-
-        myButton().Content(box_value(L"button2 Clicked"));
-
-        if ( m_pJob != nullptr )    return;
-
-        if ( !m_pJob->m_bDone )
+        if (job1 != nullptr && job2 != nullptr && job3 != nullptr)
         {
-            myLabel().Label(L"Not finished!");
+            if (job1->m_bDone && job2->m_bDone && job3->m_bDone)
+            {
+                hstring result1 = job1->showResult();
+                hstring result2 = job2->showResult();
+                hstring result3 = job3->showResult();
 
-            return;
+                resultTxt().Text(L"[Result of Job1]\n" + result1 + L"\n\n[Result of Job2]\n" + result2 + L"\n\n[Result of Job3]\n" + result3);
+
+                job1.release();
+                job2.release();
+                job3.release();
+
+                showResultButton().IsEnabled(false);
+                doJobsButton().IsEnabled(true);
+            }
+            else
+            {
+                resultTxt().Text(L"Not finished! Please click the button latter.");
+            }
         }
-
-        m_pJob->showResult ( strResult );
-
-        myLabel().Label(strResult);
     }
 }
