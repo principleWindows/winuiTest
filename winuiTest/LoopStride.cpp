@@ -83,6 +83,7 @@ void CLoopStride::doJob_2()
 	m_dwCnt_2 = GetTickCount() - m_dwCnt_2;
 
 	m_bDone = true;
+	delete[] memory;
 }
 
 void CLoopStride::doJob_3()
