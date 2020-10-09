@@ -41,3 +41,4 @@ AppPackages/
 packages/
 Generated Files/
 
+*.vcxproj.user
