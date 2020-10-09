@@ -7,11 +7,11 @@ namespace winrt::winuiTest::implementation
 	class CJob
 	{
 	public:
-		virtual void	doJob ( ){ }
-		virtual void	showResult ( winrt::hstring& strResult ) { }
+		virtual void doJob() = 0;
+		virtual winrt::hstring showResult() = 0;
 
 		CJob ( );
-		~CJob ( );
+		virtual ~CJob ( );
 
 		bool	m_bDone;
 
