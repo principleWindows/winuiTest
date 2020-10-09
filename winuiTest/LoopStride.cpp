@@ -92,15 +92,14 @@ void CLoopStride::doJob_3()
 
 	m_dwCnt_1 = GetTickCount();
 
-	constexpr int iterTimes = 50;
+	constexpr int iterTimes = 100;
 
 	// 逐行遍历
 	for (int t = 0; t < iterTimes; t++)
 	{
-		unsigned sum_row = 0;
 		for (int r = 0; r < row; r++)
 			for (int c = 0; c < col; c++)
-				sum_row += matrix[r][c];
+				matrix[r][c] += r + c;
 	}
 
 	m_dwCnt_2 = GetTickCount();
@@ -109,10 +108,9 @@ void CLoopStride::doJob_3()
 	// 逐列遍历
 	for (int t = 0; t < iterTimes; t++)
 	{
-		unsigned sum_col = 0;
 		for (int c = 0; c < col; c++)
 			for (int r = 0; r < row; r++)
-				sum_col += matrix[r][c];
+				matrix[r][c] += r + c;
 	}
 
 	m_dwCnt_2 = GetTickCount() - m_dwCnt_2;

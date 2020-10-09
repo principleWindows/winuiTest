@@ -12,12 +12,14 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <local:BgLabelControl Grid.Column="0"
                               Background="Red"
-                              Label="Hello, World!" />
+                              Label="Hello, World!"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
 
         <StackPanel Grid.Column="1"
                     HorizontalAlignment="Center"
@@ -39,7 +41,9 @@
         <TextBlock Grid.Column="2"
                    x:Name="resultTxt"
                    Text="Welcome!"
-                   FontSize="20" />
+                   FontSize="20"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
     </Grid>
 
 </Page>
